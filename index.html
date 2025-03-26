@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Controllo Bottoni</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        function toggleButton(buttonId) {
+            socket.emit('toggleButton', buttonId);
+        }
+
+        socket.on('buttonStatus', ({ buttonId, status }) => {
+            const button = document.getElementById(`button${buttonId}`);
+            button.textContent = `Bottone ${buttonId} ${status ? 'ON' : 'OFF'}`;
+        });
+
+        socket.on('buttonUpdate', (message) => {
+            const resultButton = document.getElementById('resultButton');
+            resultButton.textContent = message; // Aggiorna per mostrare se AND è attivo
+        });
+    </script>
+</head>
+<body>
+    <button id="button1" onclick="toggleButton(1)">Bottone 1 OFF</button>
+    <button id="button2" onclick="toggleButton(2)">Bottone 2 OFF</button>
+    <p id="resultButton">AND not active</p>
+</body>
+</html>
